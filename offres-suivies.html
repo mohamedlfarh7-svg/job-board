@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offres Suivies - JobBoard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">Job<span>Board</span></a>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="index.html" class="nav-link">Offres</a></li>
+          <li><a href="offres-suivies.html" class="nav-link active">Offres Suivies</a></li>
+          <li><a href="deposer-offre.html" class="btn btn-primary">+ Déposer une offre</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="margin-top: 40px; margin-bottom: 80px;">
+    <h1 class="hero-title" style="text-align: left; font-size: 2rem; margin-bottom: 8px;">Mes candidatures & offres suivies</h1>
+    <p class="hero-subtitle" style="text-align: left; margin-bottom: 32px; font-size: 0.95rem;">Suivez l'évolution de vos demandes et consultez vos annonces enregistrées.</p>
+
+    <div style="overflow-x: auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Poste</th>
+            <th>Entreprise</th>
+            <th>Contrat</th>
+            <th>Statut</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Développeur Full-Stack Laravel / React</strong></td>
+            <td>Digiglow</td>
+            <td><span class="badge badge-alternance">Alternance</span></td>
+            <td><span style="color: #34d399; font-weight: 600;">Candidature envoyée</span></td>
+            <td><a href="offre-detail.html" class="btn btn-outline" style="padding: 6px 14px; font-size: 0.8rem;">Consulter</a></td>
+          </tr>
+          <tr>
+            <td><strong>Développeur Web Frontend UI/UX</strong></td>
+            <td>Elegy</td>
+            <td><span class="badge badge-stage">Stage</span></td>
+            <td><span style="color: #f59e0b; font-weight: 600;">Enregistrée</span></td>
+            <td><a href="offre-detail.html" class="btn btn-outline" style="padding: 6px 14px; font-size: 0.8rem;">Consulter</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2026 JobBoard. Projet Full-Stack Développé pour YouCode.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

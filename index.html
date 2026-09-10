@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobBoard | Offres de Stage & Alternance</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">Job<span>Board</span></a>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="index.html" class="nav-link active">Offres</a></li>
+          <li><a href="offres-suivies.html" class="nav-link">Offres Suivies</a></li>
+          <li><a href="deposer-offre.html" class="btn btn-primary">+ Déposer une offre</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero-section">
+      <h1 class="hero-title">Trouvez votre Stage ou Alternance idéal</h1>
+      <p class="hero-subtitle">Des dizaines d'opportunités en développement web, design et ingénierie logicielle.</p>
+
+      <form class="search-box">
+        <div class="form-group-inline">
+          <input type="text" placeholder="Titre du poste, techno..." aria-label="Mots-clés">
+        </div>
+        <div class="form-group-inline">
+          <input type="text" placeholder="Ville ou Remote" aria-label="Localisation">
+        </div>
+        <div class="form-group-inline">
+          <select aria-label="Type de contrat">
+            <option value="">Tous les contrats</option>
+            <option value="stage">Stage</option>
+            <option value="alternance">Alternance</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Rechercher</button>
+      </form>
+    </section>
+
+    <div class="catalog-layout">
+      <aside class="filters-sidebar">
+        <h2 class="filter-title">Filtres de recherche</h2>
+        
+        <div class="filter-group">
+          <p class="filter-title">Type de contrat</p>
+          <div class="filter-list">
+            <label><input type="checkbox" checked> Stage</label>
+            <label><input type="checkbox" checked> Alternance</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <p class="filter-title">Technologies</p>
+          <div class="filter-list">
+            <label><input type="checkbox"> PHP / Laravel</label>
+            <label><input type="checkbox"> JavaScript / React</label>
+            <label><input type="checkbox"> Node.js / Express</label>
+            <label><input type="checkbox"> MySQL</label>
+          </div>
+        </div>
+      </aside>
+
+      <section class="jobs-grid">
+        <article class="job-card">
+          <div>
+            <div class="card-header">
+              <div class="company-logo">DG</div>
+              <span class="badge badge-alternance">Alternance</span>
+            </div>
+            <h3 class="job-title"><a href="offre-detail.html">Développeur Full-Stack Laravel / React</a></h3>
+            <p class="company-name">Digiglow • Casablanca (Hybride)</p>
+            <div class="tech-tags">
+              <span class="tag-tech">Laravel</span>
+              <span class="tag-tech">React</span>
+              <span class="tag-tech">MySQL</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span>Publié il y a 2 jours</span>
+            <a href="offre-detail.html" class="btn btn-outline">Voir l'offre</a>
+          </div>
+        </article>
+
+        <article class="job-card">
+          <div>
+            <div class="card-header">
+              <div class="company-logo">EL</div>
+              <span class="badge badge-stage">Stage</span>
+            </div>
+            <h3 class="job-title"><a href="offre-detail.html">Développeur Web Frontend UI/UX</a></h3>
+            <p class="company-name">Elegy • Rabat (Temps plein)</p>
+            <div class="tech-tags">
+              <span class="tag-tech">HTML/CSS</span>
+              <span class="tag-tech">JavaScript</span>
+              <span class="tag-tech">Figma</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span>Publié il y a 5 jours</span>
+            <a href="offre-detail.html" class="btn btn-outline">Voir l'offre</a>
+          </div>
+        </article>
+
+        <article class="job-card">
+          <div>
+            <div class="card-header">
+              <div class="company-logo">YC</div>
+              <span class="badge badge-stage">Stage</span>
+            </div>
+            <h3 class="job-title"><a href="offre-detail.html">Développeur Backend Node.js / Express</a></h3>
+            <p class="company-name">YouCode Tech • Remote</p>
+            <div class="tech-tags">
+              <span class="tag-tech">Node.js</span>
+              <span class="tag-tech">Express</span>
+              <span class="tag-tech">MySQL</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span>Publié hier</span>
+            <a href="offre-detail.html" class="btn btn-outline">Voir l'offre</a>
+          </div>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2026 JobBoard. Projet Full-Stack Développé pour YouCode.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

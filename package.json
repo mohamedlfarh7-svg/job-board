@@ -1,0 +1,21 @@
+{
+  "name": "job-board",
+  "version": "1.0.0",
+  "description": "Job Board Full-Stack Express, EJS, MySQL",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "db:seed": "node database/seed.js",
+    "db:reset": "node database/seed.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "mysql2": "^3.9.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

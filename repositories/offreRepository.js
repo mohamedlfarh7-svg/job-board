@@ -21,7 +21,7 @@ class offereRepository {
 
     if (search) {
       sql += ` AND (off.titre LIKE ? OR off.description LIKE ?)`;
-      params.push(`%${search}%`, `%${search}%`); // إرسال قيمتين منفصلتين
+      params.push(`%${search}%`, `%${search}%`);
     }
 
     if (ville) {
@@ -44,7 +44,6 @@ class offereRepository {
     const [rows] = await db.execute(sql, params);
     return rows;
   }
-
   static async findById(id) {
     const sql = `
       SELECT 
@@ -64,6 +63,14 @@ class offereRepository {
     const [rows] = await db.execute(sql, [id]);
     return rows[0] || null;
   }
+  static async createApplication(data) {
+    const { offre_id, nom, email, cv_path, message } = data;
+    const sql = `
+      INSERT INTO candidatures (offre_id, nom, email, cv_path, message, created_at)
+      VALUES (?, ?, ?, ?, ?, NOW())
+    `;
+    const [result] = await db.execute(sql, [offre_id, nom, email, cv_path, message]);
+    return result;
+  }
 }
-
 module.exports = offereRepository;

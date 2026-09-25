@@ -105,8 +105,16 @@ class offereRepository {
     return rows;
   }
 
-  static async create(data) {
-    const { titre, entreprise, description, ville, contrat, salaire } = data;
+  static async create(data = {}) {
+    const { 
+      titre = '', 
+      entreprise = '', 
+      description = '', 
+      ville = '', 
+      contrat = 'CDI', 
+      salaire = null 
+    } = data;
+
     const sql = `
       INSERT INTO offre (titre, entreprise, description, ville, contrat, salaire)
       VALUES (?, ?, ?, ?, ?, ?)

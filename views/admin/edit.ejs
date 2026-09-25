@@ -1,0 +1,120 @@
+<%- include('../partials/header') %>
+
+<main class="flex-grow max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+    <div class="mb-6">
+        <a href="/admin/offres" class="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-indigo-600 transition">
+            <i class="fa-solid fa-arrow-left"></i> Retour à la liste
+        </a>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8">
+        <div class="mb-8 border-b border-gray-100 pb-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight">Modifier l'offre d'emploi</h1>
+                <p class="text-xs text-gray-500 mt-1">Modifiez les détails de l'offre ID : #<%= offre.id %></p>
+            </div>
+            <span class="px-3 py-1 bg-amber-50 text-amber-700 text-xs font-semibold rounded-full border border-amber-200">
+                Mode Édition
+            </span>
+        </div>
+
+        <form action="/admin/offres/edit/<%= offre.id %>" method="POST" class="space-y-6">
+            <!-- Titre du poste -->
+            <div>
+                <label for="titre" class="block text-xs font-bold uppercase text-gray-700 mb-2">Titre du poste *</label>
+                <input 
+                    type="text" 
+                    id="titre"
+                    name="titre" 
+                    value="<%= offre.titre %>"
+                    required 
+                    placeholder="Ex: Développeur Full Stack Node.js / React" 
+                    class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                />
+            </div>
+
+            <!-- Entreprise & Ville -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="entreprise" class="block text-xs font-bold uppercase text-gray-700 mb-2">Entreprise *</label>
+                    <input 
+                        type="text" 
+                        id="entreprise"
+                        name="entreprise" 
+                        value="<%= offre.entreprise || offre.entreprise_nom || '' %>"
+                        required 
+                        placeholder="Ex: TechCorp Morocco" 
+                        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                    />
+                </div>
+                <div>
+                    <label for="ville" class="block text-xs font-bold uppercase text-gray-700 mb-2">Ville *</label>
+                    <input 
+                        type="text" 
+                        id="ville"
+                        name="ville" 
+                        value="<%= offre.ville || offre.entreprise_ville || '' %>"
+                        required 
+                        placeholder="Ex: Casablanca / Remote" 
+                        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                    />
+                </div>
+            </div>
+
+            <!-- Contrat & Salaire -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="contrat" class="block text-xs font-bold uppercase text-gray-700 mb-2">Type de contrat *</label>
+                    <select 
+                        id="contrat"
+                        name="contrat" 
+                        required 
+                        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white"
+                    >
+                        <% const currentContrat = offre.contrat || offre.type_contrat || 'CDI'; %>
+                        <option value="CDI" <%= currentContrat === 'CDI' ? 'selected' : '' %>>CDI</option>
+                        <option value="CDD" <%= currentContrat === 'CDD' ? 'selected' : '' %>>CDD</option>
+                        <option value="Stage" <%= currentContrat === 'Stage' ? 'selected' : '' %>>Stage</option>
+                        <option value="Freelance" <%= currentContrat === 'Freelance' ? 'selected' : '' %>>Freelance</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="salaire" class="block text-xs font-bold uppercase text-gray-700 mb-2">Salaire (Optionnel)</label>
+                    <input 
+                        type="text" 
+                        id="salaire"
+                        name="salaire" 
+                        value="<%= offre.salaire || '' %>"
+                        placeholder="Ex: 12 000 DH - 15 000 DH" 
+                        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                    />
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <label for="description" class="block text-xs font-bold uppercase text-gray-700 mb-2">Description du poste *</label>
+                <textarea 
+                    id="description"
+                    name="description" 
+                    rows="6" 
+                    required 
+                    placeholder="Décrivez les responsabilités, les compétences requises et les avantages..." 
+                    class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+                ><%= offre.description %></textarea>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                <a href="/admin/offres" class="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition">
+                    Annuler
+                </a>
+                <button type="submit" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition shadow-sm flex items-center gap-2">
+                    <i class="fa-solid fa-floppy-disk text-xs"></i> Enregistrer les modifications
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

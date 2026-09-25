@@ -11,7 +11,7 @@ class offereRepository {
         entr.logo AS entreprise_logo,
         GROUP_CONCAT(tech.nom) AS technologies 
       FROM offre off
-      JOIN entreprise entr ON off.entreprise_id = entr.id
+      LEFT JOIN entreprise entr ON off.entreprise_id = entr.id
       LEFT JOIN offre_technologie offtech ON off.id = offtech.offre_id
       LEFT JOIN technologie tech ON offtech.technologie_id = tech.id
       WHERE 1=1
@@ -39,11 +39,12 @@ class offereRepository {
       params.push(tech);
     }
 
-    sql += ` GROUP BY off.id ORDER BY off.date_publication DESC`;
+    sql += ` GROUP BY off.id ORDER BY off.id DESC`;
 
     const [rows] = await db.execute(sql, params);
     return rows;
   }
+
   static async findById(id) {
     const sql = `
       SELECT 
@@ -53,7 +54,7 @@ class offereRepository {
         entr.logo AS entreprise_logo,
         GROUP_CONCAT(tech.nom) AS technologies
       FROM offre off
-      JOIN entreprise entr ON off.entreprise_id = entr.id
+      LEFT JOIN entreprise entr ON off.entreprise_id = entr.id
       LEFT JOIN offre_technologie offtech ON off.id = offtech.offre_id
       LEFT JOIN technologie tech ON offtech.technologie_id = tech.id
       WHERE off.id = ?
@@ -63,6 +64,20 @@ class offereRepository {
     const [rows] = await db.execute(sql, [id]);
     return rows[0] || null;
   }
+  static async findAllWithApplicationsCount() {
+    const sql = `
+      SELECT 
+        off.*, 
+        COUNT(c.id) AS total_candidatures
+      FROM offre off
+      LEFT JOIN candidatures c ON off.id = c.offre_id
+      GROUP BY off.id
+      ORDER BY off.id DESC
+    `;
+    const [rows] = await db.query(sql);
+    return rows;
+  }
+
   static async createApplication(data) {
     const { offre_id, nom, email, cv_path, message } = data;
     const sql = `
@@ -72,6 +87,7 @@ class offereRepository {
     const [result] = await db.execute(sql, [offre_id, nom, email, cv_path, message]);
     return result;
   }
+
   static async findCandidatApplications(email) {
     const sql = `
       SELECT 
@@ -88,29 +104,33 @@ class offereRepository {
     const [rows] = await db.query(sql, [email]);
     return rows;
   }
-  static async create(data){
-    const {titre,entreprise,description,ville,contrat,salaire}= data;
+
+  static async create(data) {
+    const { titre, entreprise, description, ville, contrat, salaire } = data;
     const sql = `
-      INSERT INTO offre (titre,entreprise,description,ville,contrat,salaire)
-      VALUES (?,?,?,?,?,?)
-    `
-    const [result] = await db.query(sql,[titre,entreprise,description,ville,contrat,salaire]);
+      INSERT INTO offre (titre, entreprise, description, ville, contrat, salaire)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `;
+    const [result] = await db.query(sql, [titre, entreprise, description, ville, contrat, salaire]);
     return result.insertId;
   }
-  static async update(id,data){
-    const {titre,entreprise,description,ville,contrat,salaire} = data;
+
+  static async update(id, data) {
+    const { titre, entreprise, description, ville, contrat, salaire } = data;
     const sql = `
-        UPDATE offre 
-        SET titre = ? , entreprise = ? , description = ? ville = ? , contrat = ? , salaire = ? 
-        WHERE id = ?
-      `
-      const [result] = await db.query(sql, [titre, entreprise, description, ville, contrat, salaire, id]);
-      return result.affectedRows > 0;
+      UPDATE offre 
+      SET titre = ?, entreprise = ?, description = ?, ville = ?, contrat = ?, salaire = ? 
+      WHERE id = ?
+    `;
+    const [result] = await db.query(sql, [titre, entreprise, description, ville, contrat, salaire, id]);
+    return result.affectedRows > 0;
   }
+
   static async delete(id) {
     const sql = `DELETE FROM offre WHERE id = ?`;
     const [result] = await db.query(sql, [id]);
     return result.affectedRows > 0;
   }
 }
+
 module.exports = offereRepository;

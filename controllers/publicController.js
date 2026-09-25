@@ -59,15 +59,22 @@ const publicController = {
       res.status(500).send("Erreur serveur lors de l'envoi de la candidature.");
     }
   },
-  async dashboard(req, res) {
+  async mesCandidatures(req, res) {
     try {
-      const offres = await OffreRepository.findAllWithApplicationsCount();
+      const email = req.query.email || '';
+      let candidatures = [];
+
+      if (email) {
+        candidatures = await OffreRepository.findCandidatApplications(email);
+      }
+
       res.render('public/suivies', {
-        title: "Tableau de bord - Suivi des offres",
-        offres
+        title: "Suivi de mes candidatures",
+        candidatures,
+        email
       });
     } catch (error) {
-      console.error('Erreur lors du chargement du dashboard:', error);
+      console.error('Erreur lors du chargement des candidatures:', error);
       res.status(500).send('Erreur Serveur');
     }
   }

@@ -1,0 +1,133 @@
+<%- include('../partials/header') %>
+
+<main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+
+    <!-- Header Section -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 tracking-tight mb-6">
+            Mes emplois
+        </h1>
+
+        <!-- Email Search Input (Pour charger les données) -->
+        <form action="/suivi" method="GET" class="flex gap-2 max-w-md mb-8">
+            <input 
+                type="email" 
+                name="email" 
+                id="emailInput"
+                value="<%= email %>" 
+                placeholder="Entrez votre email pour charger vos candidatures" 
+                required
+                class="flex-grow px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
+            />
+            <button type="submit" class="bg-gray-900 hover:bg-gray-800 text-white font-semibold px-4 py-2 rounded-lg text-sm transition">
+                Rechercher
+            </button>
+        </form>
+
+        <!-- Navigation Tabs -->
+        <div class="border-b border-gray-200 flex gap-8 text-sm">
+            <button class="pb-3 font-semibold text-gray-400 cursor-not-allowed">
+                <span class="block text-xs text-gray-400">0</span>
+                Emplois enregistrés
+            </button>
+            <button class="pb-3 font-bold text-gray-900 border-b-2 border-gray-900 flex flex-col items-start">
+                <span class="block text-xs font-semibold text-gray-600"><%= email ? candidatures.length : 0 %></span>
+                Candidatures envoyées
+            </button>
+            <button class="pb-3 font-semibold text-gray-400 cursor-not-allowed">
+                <span class="block text-xs text-gray-400">0</span>
+                Entretiens
+            </button>
+            <button class="pb-3 font-semibold text-gray-400 cursor-not-allowed">
+                Archivées
+            </button>
+        </div>
+    </div>
+
+    <!-- Candidatures List -->
+    <% if (email) { %>
+        <div class="space-y-6">
+            <h2 class="text-sm font-bold text-gray-700">Toutes les candidatures</h2>
+
+            <% if (candidatures.length === 0) { %>
+                <div class="p-12 text-center bg-white rounded-xl border border-gray-200">
+                    <p class="text-gray-500 text-sm font-medium">Aucune candidature envoyée trouvée pour cet email.</p>
+                </div>
+            <% } else { %>
+                <div class="space-y-4">
+                    <% candidatures.forEach(item => { %>
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:border-gray-300 transition flex flex-col sm:flex-row justify-between items-start gap-4">
+                            
+                            <div class="flex gap-4 items-start">
+                                <!-- Company Icon Placeholder -->
+                                <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 shrink-0">
+                                    <i class="fa-solid fa-building text-xl"></i>
+                                </div>
+
+                                <div class="space-y-1">
+                                    <!-- Badge Statut -->
+                                    <span class="inline-block px-2.5 py-0.5 bg-emerald-50 text-emerald-700 font-semibold text-xs rounded-md">
+                                        Candidature envoyée
+                                    </span>
+
+                                    <!-- Titre du poste -->
+                                    <h3 class="text-base font-bold text-gray-900 hover:text-indigo-600 transition">
+                                        <a href="/offre/<%= item.id %>"><%= item.titre %></a>
+                                    </h3>
+
+                                    <!-- Entreprise & Ville -->
+                                    <p class="text-sm text-gray-600 font-medium"><%= item.entreprise || 'Entreprise Recruteur' %></p>
+                                    <p class="text-xs text-gray-500"><%= item.ville %></p>
+
+                                    <!-- Date de postulation -->
+                                    <p class="text-xs text-gray-400 pt-1">
+                                        Candidature envoyée le <%= new Date(item.date_candidature).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }) %>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+                                <% if (item.cv_path) { %>
+                                    <a href="/uploads/cvs/<%= item.cv_path %>" target="_blank" class="px-3 py-1.5 border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-lg transition flex items-center gap-1.5">
+                                        <i class="fa-solid fa-file-pdf text-red-500"></i> CV
+                                    </a>
+                                <% } %>
+                                <a href="/offre/<%= item.id %>" class="px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-900 text-xs font-bold rounded-lg transition">
+                                    Mettre à jour le statut
+                                </a>
+                            </div>
+
+                        </div>
+                    <% }) %>
+                </div>
+            <% } %>
+        </div>
+    <% } else { %>
+        <div class="p-12 text-center bg-white rounded-xl border border-gray-200">
+            <p class="text-gray-500 text-sm font-medium">Veuillez entrer votre adresse email ci-dessus pour consulter vos candidatures.</p>
+        </div>
+    <% } %>
+
+</main>
+
+<!-- Persistance Automatique avec LocalStorage -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const emailInput = document.getElementById('emailInput');
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentEmail = urlParams.get('email');
+
+        if (currentEmail) {
+            localStorage.setItem('candidate_email', currentEmail);
+        } else {
+            const savedEmail = localStorage.getItem('candidate_email');
+            if (savedEmail) {
+                emailInput.value = savedEmail;
+                window.location.href = `/suivi?email=${encodeURIComponent(savedEmail)}`;
+            }
+        }
+    });
+</script>
+
+<%- include('../partials/footer') %>

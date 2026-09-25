@@ -72,17 +72,20 @@ class offereRepository {
     const [result] = await db.execute(sql, [offre_id, nom, email, cv_path, message]);
     return result;
   }
-  static async findAllWithApplicationsCount() {
+  static async findCandidatApplications(email) {
     const sql = `
       SELECT 
-        o.*, 
-        COUNT(c.id) AS total_candidatures
-      FROM offre o
-      LEFT JOIN candidatures c ON o.id = c.offre_id
-      GROUP BY o.id
-      ORDER BY o.created_at DESC
+        c.id AS candidature_id,
+        c.created_at AS date_candidature,
+        c.cv_path,
+        c.message,
+        o.*
+      FROM candidatures c
+      JOIN offre o ON c.offre_id = o.id
+      WHERE c.email = ?
+      ORDER BY c.created_at DESC
     `;
-    const [rows] = await db.query(sql);
+    const [rows] = await db.query(sql, [email]);
     return rows;
   }
 }

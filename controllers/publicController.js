@@ -58,6 +58,18 @@ const publicController = {
       console.error("Erreur dans PublicController.apply:", error);
       res.status(500).send("Erreur serveur lors de l'envoi de la candidature.");
     }
+  },
+  async dashboard(req, res) {
+    try {
+      const offres = await OffreRepository.findAllWithApplicationsCount();
+      res.render('public/dashboard', {
+        title: "Tableau de bord - Suivi des offres",
+        offres
+      });
+    } catch (error) {
+      console.error('Erreur lors du chargement du dashboard:', error);
+      res.status(500).send('Erreur Serveur');
+    }
   }
 };
 

@@ -72,5 +72,18 @@ class offereRepository {
     const [result] = await db.execute(sql, [offre_id, nom, email, cv_path, message]);
     return result;
   }
+  static async findAllWithApplicationsCount() {
+    const sql = `
+      SELECT 
+        o.*, 
+        COUNT(c.id) AS total_candidatures
+      FROM offre o
+      LEFT JOIN candidatures c ON o.id = c.offre_id
+      GROUP BY o.id
+      ORDER BY o.created_at DESC
+    `;
+    const [rows] = await db.query(sql);
+    return rows;
+  }
 }
 module.exports = offereRepository;

@@ -62,7 +62,7 @@ const publicController = {
   async dashboard(req, res) {
     try {
       const offres = await OffreRepository.findAllWithApplicationsCount();
-      res.render('public/dashboard', {
+      res.render('public/suivies', {
         title: "Tableau de bord - Suivi des offres",
         offres
       });

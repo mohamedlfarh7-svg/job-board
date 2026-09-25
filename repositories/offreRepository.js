@@ -88,5 +88,29 @@ class offereRepository {
     const [rows] = await db.query(sql, [email]);
     return rows;
   }
+  static async create(data){
+    const {titre,entreprise,description,ville,contrat,salaire}= data;
+    const sql = `
+      INSERT INTO offre (titre,entreprise,description,ville,contrat,salaire)
+      VALUES (?,?,?,?,?,?)
+    `
+    const [result] = await db.query(sql,[titre,entreprise,description,ville,contrat,salaire]);
+    return result.insertId;
+  }
+  static async update(id,data){
+    const {titre,entreprise,description,ville,contrat,salaire} = data;
+    const sql = `
+        UPDATE offre 
+        SET titre = ? , entreprise = ? , description = ? ville = ? , contrat = ? , salaire = ? 
+        WHERE id = ?
+      `
+      const [result] = await db.query(sql, [titre, entreprise, description, ville, contrat, salaire, id]);
+      return result.affectedRows > 0;
+  }
+  static async delete(id) {
+    const sql = `DELETE FROM offre WHERE id = ?`;
+    const [result] = await db.query(sql, [id]);
+    return result.affectedRows > 0;
+  }
 }
 module.exports = offereRepository;

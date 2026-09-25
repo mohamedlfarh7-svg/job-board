@@ -1,6 +1,10 @@
 const express = require('express');
 const app = express();
-const path =  require('path')
+const path =  require('path');
+const adminRoutes = require('./routes/adminRoutes');
+app.use('/admin', adminRoutes);
+
+app.get('/post-job', (req, res) => res.redirect('/admin/offres/create'));
 
 app.set('view engine', 'ejs');
 app.set('views',path.join(__dirname,'views'));

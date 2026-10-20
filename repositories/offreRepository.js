@@ -4,8 +4,7 @@ class offereRepository {
   static async findAll({ search, ville, contrat, tech } = {}) {
     let sql = `
       SELECT
-        off.id, off.titre, off.description, off.type_contrat, off.salaire,
-        off.date_publication,
+        off.*,
         entr.nom AS entreprise_nom,
         entr.ville AS entreprise_ville,
         entr.logo AS entreprise_logo,
@@ -25,13 +24,13 @@ class offereRepository {
     }
 
     if (ville) {
-      sql += ` AND entr.ville = ?`;
-      params.push(ville);
+      sql += ` AND (entr.ville = ? OR off.ville = ?)`;
+      params.push(ville, ville);
     }
 
     if (contrat) {
-      sql += ` AND off.type_contrat = ?`;
-      params.push(contrat);
+      sql += ` AND (off.type_contrat = ? OR off.contrat = ?)`;
+      params.push(contrat, contrat);
     }
 
     if (tech) {
@@ -42,7 +41,15 @@ class offereRepository {
     sql += ` GROUP BY off.id ORDER BY off.id DESC`;
 
     const [rows] = await db.execute(sql, params);
-    return rows;
+
+    // Kanjido l-fallback f-JS bash ma-y'bqa ḥta ḥaja NULL:
+    return rows.map(item => ({
+      ...item,
+      entreprise_nom: item.entreprise_nom || item.entreprise || 'Entreprise',
+      entreprise_ville: item.entreprise_ville || item.ville || 'Non spécifiée',
+      type_contrat: item.type_contrat || item.contrat || 'CDI',
+      date_publication: item.date_publication || new Date()
+    }));
   }
 
   static async findById(id) {
@@ -62,8 +69,18 @@ class offereRepository {
     `;
 
     const [rows] = await db.execute(sql, [id]);
-    return rows[0] || null;
+    if (!rows[0]) return null;
+
+    const item = rows[0];
+    return {
+      ...item,
+      entreprise_nom: item.entreprise_nom || item.entreprise || 'Entreprise',
+      entreprise_ville: item.entreprise_ville || item.ville || 'Non spécifiée',
+      type_contrat: item.type_contrat || item.contrat || 'CDI',
+      date_publication: item.date_publication || new Date()
+    };
   }
+
   static async findAllWithApplicationsCount() {
     const sql = `
       SELECT 
@@ -112,25 +129,26 @@ class offereRepository {
       description = '', 
       ville = '', 
       contrat = 'CDI', 
+      type_contrat = 'CDI',
       salaire = null 
     } = data;
 
     const sql = `
-      INSERT INTO offre (titre, entreprise, description, ville, contrat, salaire)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO offre (titre, entreprise, description, ville, contrat, type_contrat, salaire, date_publication)
+      VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
     `;
-    const [result] = await db.query(sql, [titre, entreprise, description, ville, contrat, salaire]);
+    const [result] = await db.query(sql, [titre, entreprise, description, ville, contrat, type_contrat || contrat, salaire]);
     return result.insertId;
   }
 
   static async update(id, data) {
-    const { titre, entreprise, description, ville, contrat, salaire } = data;
+    const { titre, entreprise, description, ville, contrat, type_contrat, salaire } = data;
     const sql = `
       UPDATE offre 
-      SET titre = ?, entreprise = ?, description = ?, ville = ?, contrat = ?, salaire = ? 
+      SET titre = ?, entreprise = ?, description = ?, ville = ?, contrat = ?, type_contrat = ?, salaire = ? 
       WHERE id = ?
     `;
-    const [result] = await db.query(sql, [titre, entreprise, description, ville, contrat, salaire, id]);
+    const [result] = await db.query(sql, [titre, entreprise, description, ville, contrat, type_contrat || contrat, salaire, id]);
     return result.affectedRows > 0;
   }
 
